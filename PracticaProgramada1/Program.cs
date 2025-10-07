@@ -1,7 +1,19 @@
+using PracticaProgramada1BBL.Mapeos;
+using PracticaProgramada1BBL.Servicios;
+using PracticaProgramada1DAL.Repositorios;
+using PracticaProgramada1DAL.Entidades;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IClientesRepositorio, ClientesRepositorio>();
+builder.Services.AddSingleton<IClientesServicio, ClienteServicio>(); //Mala practics
+
+builder.Services.AddAutoMapper(cfg => { }, typeof(MapeoClase));
 
 var app = builder.Build();
 
@@ -23,5 +35,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "Clientes",
+    pattern: "{controller=Cliente}/{action=Index}/{id?}");
 
 app.Run();

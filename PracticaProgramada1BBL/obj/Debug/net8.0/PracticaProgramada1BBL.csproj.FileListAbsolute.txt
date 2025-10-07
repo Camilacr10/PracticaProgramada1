@@ -1,0 +1,16 @@
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\bin\Debug\net8.0\PracticaProgramada1BBL.deps.json
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\bin\Debug\net8.0\PracticaProgramada1BBL.dll
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\bin\Debug\net8.0\PracticaProgramada1BBL.pdb
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\bin\Debug\net8.0\PracticaProgramada1DAL.dll
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\bin\Debug\net8.0\PracticaProgramada1DAL.pdb
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.csproj.AssemblyReference.cache
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.AssemblyInfoInputs.cache
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.AssemblyInfo.cs
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.csproj.CoreCompileInputs.cache
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.sourcelink.json
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\Practica.DFCA2BCC.Up2Date
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.dll
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\refint\PracticaProgramada1BBL.dll
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\PracticaProgramada1BBL.pdb
+C:\Proyectos\Tercer Cuatrimestre 2025\Proyecto de Programación Avanzada Web\Practicas programadas\PracticaProgramada1\PracticaProgramada1BBL\obj\Debug\net8.0\ref\PracticaProgramada1BBL.dll

@@ -1,0 +1,53 @@
+﻿@using PracticaProgramada1BLL.Dtos
+
+@model List<ClienteDto>
+
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Crear Nuevo Cliente</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Teléfonos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+            <tr>
+                <td>@cliente.Id</td>
+                <td>@cliente.Nombre</td>
+                <td>@cliente.Apellido</td>
+                <td>@cliente.Edad</td>
+                <td>
+                    @if (cliente.Telefonos != null && cliente.Telefonos.Any())
+                    {
+                        foreach (var tel in cliente.Telefonos)
+                        {
+                            <div>@tel.Numero (@tel.Tipo)</div>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin teléfonos</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@cliente.Id" class="btn btn-primary btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@cliente.Id" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@cliente.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
