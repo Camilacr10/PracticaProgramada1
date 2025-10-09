@@ -70,18 +70,19 @@ namespace PracticaProgramada1BBL.Servicios
         public async Task<CustomResponse<ClienteDto>> ObtenerClientePorIdAsync(int id)
         {
             var respuesta = new CustomResponse<ClienteDto>();
-
             var cliente = await _clientesRepositorio.ObtenerClientePorIdAsync(id);
 
-            var validaciones = validar(cliente);
-            if (validaciones.EsError)
+            if (cliente == null)
             {
-                return validaciones;
+                respuesta.EsError = true;
+                respuesta.Mensaje = "Cliente no encontrado";
+                return respuesta;
             }
 
             respuesta.Data = _mapper.Map<ClienteDto>(cliente);
             return respuesta;
         }
+
 
         public async Task<CustomResponse<List<ClienteDto>>> ObtenerClientesAsync()
         {

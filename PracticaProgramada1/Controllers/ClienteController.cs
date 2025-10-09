@@ -68,5 +68,33 @@ namespace PracticaProgramada1.Controllers
             if (cliente.Telefonos.Count == 0) cliente.Telefonos.Add(new TelefonoDto());
             return View(cliente);
         }
+
+
+        //GET: Usuario/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var respuesta = await _clientesServicio.ObtenerClientePorIdAsync(id);
+            if (respuesta.EsError)
+            {
+                return NotFound();
+            }
+            return View(respuesta.Data);
+        }
+
+        //POST: Usuario/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var respuesta = await _clientesServicio.EliminarClienteAsync(id);
+            if (!respuesta.EsError)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            ModelState.AddModelError(string.Empty, respuesta.Mensaje);
+            return View("Delete", respuesta.Data);
+        }
+
     }
+
 }
