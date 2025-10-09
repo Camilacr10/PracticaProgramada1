@@ -1,4 +1,5 @@
 ﻿@model PracticaProgramada1BLL.Dtos.ClienteDto
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Agregar Cliente";
@@ -6,7 +7,10 @@
 
 <h2>Agregar Cliente</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" id="frmCliente">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group">
         <label asp-for="Nombre"></label>
         <input asp-for="Nombre" class="form-control" />
@@ -26,33 +30,142 @@
     </div>
 
     <hr class="my-3" />
-    <h5>Teléfono principal</h5>
+    <h5>Teléfonos</h5>
 
-    <div class="form-group">
-        <label asp-for="Telefonos[0].Numero">Número</label>
-        <input asp-for="Telefonos[0].Numero" class="form-control" placeholder="####-####" />
-        <span asp-validation-for="Telefonos[0].Numero" class="text-danger"></span>
+    <div id="phones-list">
+        @if (Model.Telefonos != null && Model.Telefonos.Count > 0)
+        {
+            @for (var i = 0; i < Model.Telefonos.Count; i++)
+            {
+                <div class="card mb-2 phone-item">
+                    <div class="card-body">
+                        <input type="hidden" name="Telefonos.Index" value="@i" />
+
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label" for="tel_num_@i">Número</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="tel_num_@i"
+                                       name="Telefonos[@i].Numero"
+                                       value="@Model.Telefonos[i].Numero"
+                                       placeholder="####-####" />
+                                <span class="text-danger"
+                                      data-valmsg-for="Telefonos[@i].Numero"
+                                      data-valmsg-replace="true"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label" for="tel_tipo_@i">Tipo</label>
+                                <select class="form-control"
+                                        id="tel_tipo_@i"
+                                        name="Telefonos[@i].Tipo">
+                                    <option value="">-- Seleccione --</option>
+                                    <option value="Móvil" selected="@(Model.Telefonos[i].Tipo == "Móvil")">Móvil</option>
+                                    <option value="Casa" selected="@(Model.Telefonos[i].Tipo == "Casa")">Casa</option>
+                                    <option value="Trabajo" selected="@(Model.Telefonos[i].Tipo == "Trabajo")">Trabajo</option>
+                                </select>
+                                <span class="text-danger"
+                                      data-valmsg-for="Telefonos[@i].Tipo"
+                                      data-valmsg-replace="true"></span>
+                            </div>
+
+                            <div class="col-md-2 d-grid">
+                                <button type="button" class="btn btn-outline-danger btn-remove-phone">Quitar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
     </div>
 
-    <div class="form-group mt-2">
-        <label asp-for="Telefonos[0].Tipo">Tipo</label>
-        <select asp-for="Telefonos[0].Tipo" class="form-control">
-            <option value="">-- Seleccione --</option>
-            <option>Móvil</option>
-            <option>Casa</option>
-            <option>Trabajo</option>
-        </select>
-        <span asp-validation-for="Telefonos[0].Tipo" class="text-danger"></span>
-    </div>
+    <button type="button" id="btnAddPhone" class="btn btn-outline-secondary mt-2">
+        ¿Desea agregar un nuevo número?
+    </button>
 
-    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Cancelar</a>
+    <div class="mt-4">
+        <button type="submit" name="action" value="save" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
 
+<template id="phone-template">
+    <div class="card mb-2 phone-item">
+        <div class="card-body">
+            <input type="hidden" name="Telefonos.Index" value="__index__" />
 
+            <div class="row g-2 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label">Número</label>
+                    <input type="text"
+                           class="form-control"
+                           name="Telefonos[__index__].Numero"
+                           placeholder="####-####"
+                           data-val="true"
+                           data-val-required="El número es obligatorio." />
+                    <span class="text-danger"
+                          data-valmsg-for="Telefonos[__index__].Numero"
+                          data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Tipo</label>
+                    <select class="form-control"
+                            name="Telefonos[__index__].Tipo"
+                            data-val="true"
+                            data-val-required="El tipo es obligatorio.">
+                        <option value="">-- Seleccione --</option>
+                        <option value="Móvil">Móvil</option>
+                        <option value="Casa">Casa</option>
+                        <option value="Trabajo">Trabajo</option>
+                    </select>
+                    <span class="text-danger"
+                          data-valmsg-for="Telefonos[__index__].Tipo"
+                          data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="button" class="btn btn-outline-danger btn-remove-phone">Quitar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        (function () {
+            const list = document.getElementById('phones-list');
+            const btnAdd = document.getElementById('btnAddPhone');
+            const tmpl = document.getElementById('phone-template');
+
+            let nextIdx = list.querySelectorAll('input[name="Telefonos.Index"]').length;
+
+            if (nextIdx === 0) addPhone();
+
+            btnAdd.addEventListener('click', addPhone);
+
+            list.addEventListener('click', function (e) {
+                if (e.target.classList.contains('btn-remove-phone')) {
+                    e.target.closest('.phone-item')?.remove();
+                }
+            });
+
+            function addPhone() {
+                const html = tmpl.innerHTML.replaceAll('__index__', nextIdx.toString());
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = html.trim();
+                const node = wrapper.firstElementChild;
+                list.appendChild(node);
+                nextIdx++;
+
+                // Rehabilita la validación
+                if (window.jQuery && jQuery.validator && jQuery.validator.unobtrusive) {
+                    jQuery.validator.unobtrusive.parse(node);
+                }
+            }
+        })();
+    </script>
 }
