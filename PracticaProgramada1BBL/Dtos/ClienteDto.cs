@@ -31,7 +31,7 @@ namespace PracticaProgramada1BLL.Dtos
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El número de teléfono es obligatorio")]
-        [RegularExpression(@"^\d{4}-\d{4}$", ErrorMessage = "El formato del teléfono debe ser ####-####")]
+        
         public string Numero { get; set; }
 
         [Required(ErrorMessage = "El tipo de teléfono es obligatorio")]

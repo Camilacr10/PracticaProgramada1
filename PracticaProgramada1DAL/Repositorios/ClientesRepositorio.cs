@@ -45,6 +45,12 @@ namespace PracticaProgramada1DAL.Repositorios
         public async Task<bool> AgregarClienteAsync(Cliente cliente)
         {
             cliente.Id = clientes.Any() ? clientes.Max(c => c.Id) + 1 : 1;
+
+            cliente.Telefonos.ForEach(t =>
+            {
+            t.Id = cliente.Telefonos.Any() ? cliente.Telefonos.Max(t => t.Id) + 1 : 1;
+            });
+
             clientes.Add(cliente);
             return true;
         }
