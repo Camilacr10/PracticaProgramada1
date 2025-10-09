@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PracticaProgramada1BBL\PracticaProgramada1BBL.csproj" />
+    <ProjectReference Include="..\PracticaProgramada1DAL\PracticaProgramada1DAL.csproj" />
+  </ItemGroup>
+
+</Project>
