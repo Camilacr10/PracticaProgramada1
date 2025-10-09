@@ -1,15 +1,12 @@
-﻿    using System.Diagnostics;
-    using Microsoft.AspNetCore.Mvc;
-    using PracticaProgramada1.Models;      
-    using PracticaProgramada1BBL.Servicios;
-    using PracticaProgramada1BLL.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using PracticaProgramada1BBL.Servicios;
+using PracticaProgramada1BLL.Dtos;
 
-    namespace PracticaProgramada1.Controllers
-    {
+namespace PracticaProgramada1.Controllers
+{
     public class ClienteController : Controller
     {
         private readonly ILogger<ClienteController> _logger;
-
         private readonly IClientesServicio _clientesServicio;
 
         public ClienteController(ILogger<ClienteController> logger, IClientesServicio clientesServicio)
@@ -18,6 +15,7 @@
             _clientesServicio = clientesServicio;
         }
 
+        // GET: Cliente
         public async Task<IActionResult> Index()
         {
             var respuesta = await _clientesServicio.ObtenerClientesAsync();
@@ -35,5 +33,40 @@
             return View(respuesta.Data);
         }
 
+        // GET: Cliente/Create
+        public IActionResult Create()
+        {
+            var model = new ClienteDto
+            {
+                Telefonos = new List<TelefonoDto> { new TelefonoDto() } // para Telefonos[0] en la vista
+            };
+            return View(model);
+        }
+
+        // POST: Cliente/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ClienteDto cliente)
+        {
+            // Garantiza que la lista exista para re-render en caso de error
+            cliente.Telefonos ??= new List<TelefonoDto>();
+
+            if (!ModelState.IsValid)
+            {
+                // Si no hay slot para la vista, agrega uno
+                if (cliente.Telefonos.Count == 0) cliente.Telefonos.Add(new TelefonoDto());
+                return View(cliente);
+            }
+
+            var respuesta = await _clientesServicio.AgregarClienteAsync(cliente);
+            if (!respuesta.EsError)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            ModelState.AddModelError(string.Empty, respuesta.Mensaje ?? "No se pudo agregar el cliente.");
+            if (cliente.Telefonos.Count == 0) cliente.Telefonos.Add(new TelefonoDto());
+            return View(cliente);
+        }
     }
-    }
+}
