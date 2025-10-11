@@ -70,7 +70,39 @@ namespace PracticaProgramada1.Controllers
         }
 
 
-        //GET: Usuario/Delete/5
+        //GET: Cliente/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var respuesta = await _clientesServicio.ObtenerClientePorIdAsync(id);
+            if (respuesta.EsError)
+            {
+                return NotFound();
+            }
+            return View(respuesta.Data);
+        }
+
+        //POST: Cliente/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, ClienteDto clienteDto)
+        {
+            if (id != clienteDto.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var respuesta = await _clientesServicio.ActualizarClienteAsync(clienteDto);
+                if (!respuesta.EsError)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, respuesta.Mensaje);
+            }
+            return View(clienteDto);
+        }
+
+        //GET: Cliente/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var respuesta = await _clientesServicio.ObtenerClientePorIdAsync(id);
@@ -81,7 +113,7 @@ namespace PracticaProgramada1.Controllers
             return View(respuesta.Data);
         }
 
-        //POST: Usuario/Delete/5
+        //POST: Cliente/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
