@@ -101,12 +101,16 @@ namespace PracticaProgramada1.Controllers
             var clienteOriginal = await _clientesServicio.ObtenerClientePorIdAsync(id);
             if (!clienteOriginal.EsError && clienteOriginal.Data != null)
             {
-                int maxId = clienteOriginal.Data.Telefonos?.Max(t => t.Id) ?? 0;
+                clienteOriginal.Data.Telefonos ??= new List<TelefonoDto>();
+
+                int maxId = clienteOriginal.Data.Telefonos.Any()
+                    ? clienteOriginal.Data.Telefonos.Max(t => t.Id)
+                    : 0;
 
                 foreach (var telefono in clienteDto.Telefonos)
                 {
                     var existente = clienteOriginal.Data.Telefonos
-                        ?.FirstOrDefault(t => t.Id == telefono.Id);
+                        .FirstOrDefault(t => t.Id == telefono.Id);
 
                     if (existente != null)
                     {
@@ -135,6 +139,7 @@ namespace PracticaProgramada1.Controllers
 
             return View(clienteDto);
         }
+
 
         //GET: Cliente/Delete/5
         public async Task<IActionResult> Delete(int id)
