@@ -6,7 +6,7 @@
 
 <h2>Editar Cliente</h2>
 
-<form asp-action="Edit" method="post" id="frmCliente">
+<form asp-action="Edit" method="post" id="frmCliente" novalidate>
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -14,19 +14,19 @@
 
     <div class="form-group">
         <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" class="form-control" />
+        <input asp-for="Nombre" class="form-control" required />
         <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
 
     <div class="form-group mt-2">
         <label asp-for="Apellido"></label>
-        <input asp-for="Apellido" class="form-control" />
+        <input asp-for="Apellido" class="form-control" required />
         <span asp-validation-for="Apellido" class="text-danger"></span>
     </div>
 
     <div class="form-group mt-2">
         <label asp-for="Edad"></label>
-        <input asp-for="Edad" class="form-control" />
+        <input asp-for="Edad" class="form-control" required type="number" min="0" />
         <span asp-validation-for="Edad" class="text-danger"></span>
     </div>
 
@@ -40,7 +40,6 @@
             {
                 <div class="card mb-2 phone-item">
                     <div class="card-body">
-                        <input type="hidden" name="Telefonos.Index" value="@i" />
                         <input type="hidden" name="Telefonos[@i].Id" value="@Model.Telefonos[i].Id" />
 
                         <div class="row g-2 align-items-end">
@@ -51,24 +50,21 @@
                                        id="tel_num_@i"
                                        name="Telefonos[@i].Numero"
                                        value="@Model.Telefonos[i].Numero"
-                                       placeholder="####-####" />
-                                <span class="text-danger"
-                                      data-valmsg-for="Telefonos[@i].Numero"
-                                      data-valmsg-replace="true"></span>
+                                       placeholder="####-####"
+                                       required />
                             </div>
+
                             <div class="col-md-4">
                                 <label class="form-label" for="tel_tipo_@i">Tipo</label>
                                 <select class="form-control"
                                         id="tel_tipo_@i"
-                                        name="Telefonos[@i].Tipo">
+                                        name="Telefonos[@i].Tipo"
+                                        required>
                                     <option value="">-- Seleccione --</option>
-                                    <option value="Móvil" selected="@(Model.Telefonos[i].Tipo == "Móvil")">Móvil</option>
-                                    <option value="Casa" selected="@(Model.Telefonos[i].Tipo == "Casa")">Casa</option>
-                                    <option value="Trabajo" selected="@(Model.Telefonos[i].Tipo == "Trabajo")">Trabajo</option>
+                                    <option value="Móvil" selected="@(Model.Telefonos[i].Tipo == "Móvil" ? "selected" : null)">Móvil</option>
+                                    <option value="Casa" selected="@(Model.Telefonos[i].Tipo == "Casa" ? "selected" : null)">Casa</option>
+                                    <option value="Trabajo" selected="@(Model.Telefonos[i].Tipo == "Trabajo" ? "selected" : null)">Trabajo</option>
                                 </select>
-                                <span class="text-danger"
-                                      data-valmsg-for="Telefonos[@i].Tipo"
-                                      data-valmsg-replace="true"></span>
                             </div>
 
                             <div class="col-md-2 d-grid">
@@ -82,11 +78,13 @@
     </div>
 
     <button type="button" id="btnAddPhone" class="btn btn-outline-secondary mt-2">
-        ¿Desea agregar un nuevo número?
+        Agregar Teléfono
     </button>
 
     <div class="mt-4">
-        <button type="submit" name="action" value="save" class="btn btn-primary">Guardar</button>
+        <button type="submit" name="action" value="save" class="btn btn-primary">
+            Guardar
+        </button>
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </div>
 </form>
@@ -94,8 +92,7 @@
 <template id="phone-template">
     <div class="card mb-2 phone-item">
         <div class="card-body">
-            <input type="hidden" name="Telefonos.Index" value="__index__" />
-            <input type="hidden" name="Telefonos[__index__].Id" />
+            <input type="hidden" name="Telefonos[__index__].Id" value="0" />
 
             <div class="row g-2 align-items-end">
                 <div class="col-md-6">
@@ -104,27 +101,19 @@
                            class="form-control"
                            name="Telefonos[__index__].Numero"
                            placeholder="####-####"
-                           data-val="true"
-                           data-val-required="El número es obligatorio." />
-                    <span class="text-danger"
-                          data-valmsg-for="Telefonos[__index__].Numero"
-                          data-valmsg-replace="true"></span>
+                           required />
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Tipo</label>
                     <select class="form-control"
                             name="Telefonos[__index__].Tipo"
-                            data-val="true"
-                            data-val-required="El tipo es obligatorio.">
+                            required>
                         <option value="">-- Seleccione --</option>
                         <option value="Móvil">Móvil</option>
                         <option value="Casa">Casa</option>
                         <option value="Trabajo">Trabajo</option>
                     </select>
-                    <span class="text-danger"
-                          data-valmsg-for="Telefonos[__index__].Tipo"
-                          data-valmsg-replace="true"></span>
                 </div>
 
                 <div class="col-md-2 d-grid">
@@ -136,11 +125,13 @@
 </template>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const btnAddPhone = document.getElementById("btnAddPhone");
             const phonesList = document.getElementById("phones-list");
             const phoneTemplate = document.getElementById("phone-template").innerHTML;
+            const form = document.getElementById("frmCliente");
 
             function updatePhoneIndices() {
                 const phoneItems = phonesList.querySelectorAll(".phone-item");
@@ -152,8 +143,10 @@
                     });
                 });
             }
+
             btnAddPhone.addEventListener("click", function () {
-                const newPhoneHtml = phoneTemplate.replace(/__index__/g, "0"); 
+                const newIndex = phonesList.querySelectorAll(".phone-item").length;
+                const newPhoneHtml = phoneTemplate.replace(/__index__/g, newIndex);
                 const tempDiv = document.createElement("div");
                 tempDiv.innerHTML = newPhoneHtml;
                 phonesList.appendChild(tempDiv.firstElementChild);
@@ -165,6 +158,54 @@
                     const phoneItem = e.target.closest(".phone-item");
                     phoneItem.remove();
                     updatePhoneIndices();
+                }
+            });
+
+            form.addEventListener("submit", async function (e) {
+                const isValid = form.checkValidity();
+                form.classList.add("was-validated");
+
+                if (!isValid) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+
+                e.preventDefault();
+                const formData = new FormData(form);
+
+                Swal.fire({
+                    title: 'Guardando...',
+                    text: 'Por favor espere un momento',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Cliente actualizado',
+                            text: 'El cliente se ha guardado correctamente',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = '@Url.Action("Index", "Cliente")';
+                        });
+                    } else {
+                        throw new Error("Error en el guardado");
+                    }
+                } catch {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un problema al guardar el cliente'
+                    });
                 }
             });
         });
