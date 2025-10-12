@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PracticaProgramada1BLL.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace PracticaProgramada1BBL.Dtos
         public string Mensaje { get; set; }
 
         public T Data { get; set; }
+        public List<TelefonoDto> Telefonos { get; set; }
 
         public CustomResponse()
         {

@@ -22,12 +22,14 @@ namespace PracticaProgramada1BLL.Dtos
         public int? Edad { get; set; }
 
         // Lista para hacer la relación de un cliente tiene varios teléfonos
-        public List<TelefonoDto> Telefonos { get; set; } = new List<TelefonoDto>();
+        public List<TelefonoDto> Telefonos { get; set; } = new();
     }
 
     //Clase para representar los teléfonos asociados a un cliente
     public class TelefonoDto
     {
+        public int Index;
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El número de teléfono es obligatorio")]
@@ -36,5 +38,9 @@ namespace PracticaProgramada1BLL.Dtos
 
         [Required(ErrorMessage = "El tipo de teléfono es obligatorio")]
         public string Tipo { get; set; } // "Móvil", "Casa", "Trabajo"
+
+
+
+
     }
 }

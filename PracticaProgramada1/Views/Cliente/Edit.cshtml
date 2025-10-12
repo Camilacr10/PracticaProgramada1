@@ -42,6 +42,8 @@
                     <div class="card-body">
                         <input type="hidden" name="Telefonos.Index" value="@i" />
 
+                        <input type="hidden" name="Telefonos[@i].Id" value="@Model.Telefonos[i].Id" />
+
                         <div class="row g-2 align-items-end">
                             <div class="col-md-6">
                                 <label class="form-label" for="tel_num_@i">Número</label>
@@ -70,7 +72,6 @@
                                       data-valmsg-replace="true"></span>
                             </div>
 
-
                             <div class="col-md-2 d-grid">
                                 <button type="button" class="btn btn-outline-danger btn-remove-phone">Quitar</button>
                             </div>
@@ -95,6 +96,7 @@
     <div class="card mb-2 phone-item">
         <div class="card-body">
             <input type="hidden" name="Telefonos.Index" value="__index__" />
+            <input type="hidden" name="Telefonos[__index__].Id" /> 
 
             <div class="row g-2 align-items-end">
                 <div class="col-md-6">
@@ -144,7 +146,6 @@
 
             let nextIdx = list.querySelectorAll('input[name="Telefonos.Index"]').length;
 
-            // Si no hay teléfonos precargados, agrega uno por defecto
             if (nextIdx === 0) addPhone();
 
             btnAdd.addEventListener('click', addPhone);
@@ -163,7 +164,6 @@
                 list.appendChild(node);
                 nextIdx++;
 
-                // Rehabilitar validación unobtrusive en el nuevo bloque
                 if (window.jQuery && jQuery.validator && jQuery.validator.unobtrusive) {
                     jQuery.validator.unobtrusive.parse(node);
                 }

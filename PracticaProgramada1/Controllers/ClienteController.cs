@@ -87,18 +87,52 @@ namespace PracticaProgramada1.Controllers
         public async Task<IActionResult> Edit(int id, ClienteDto clienteDto)
         {
             if (id != clienteDto.Id)
-            {
                 return NotFound();
-            }
-            if (ModelState.IsValid)
+
+            clienteDto.Telefonos ??= new List<TelefonoDto>();
+
+            if (!ModelState.IsValid)
             {
-                var respuesta = await _clientesServicio.ActualizarClienteAsync(clienteDto);
-                if (!respuesta.EsError)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                ModelState.AddModelError(string.Empty, respuesta.Mensaje);
+                if (clienteDto.Telefonos.Count == 0)
+                    clienteDto.Telefonos.Add(new TelefonoDto());
+                return View(clienteDto);
             }
+
+            var clienteOriginal = await _clientesServicio.ObtenerClientePorIdAsync(id);
+            if (!clienteOriginal.EsError && clienteOriginal.Data != null)
+            {
+                int maxId = clienteOriginal.Data.Telefonos?.Max(t => t.Id) ?? 0;
+
+                foreach (var telefono in clienteDto.Telefonos)
+                {
+                    var existente = clienteOriginal.Data.Telefonos
+                        ?.FirstOrDefault(t => t.Id == telefono.Id);
+
+                    if (existente != null)
+                    {
+                        telefono.Id = existente.Id;
+                    }
+                    else
+                    {
+                        maxId++;
+                        telefono.Id = maxId;
+                    }
+                }
+            }
+
+            var respuesta = await _clientesServicio.ActualizarClienteAsync(clienteDto);
+
+            if (!respuesta.EsError)
+            {
+                TempData["Success"] = "Cliente actualizado exitosamente.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ModelState.AddModelError(string.Empty, respuesta.Mensaje ?? "No se pudo actualizar el cliente.");
+
+            if (clienteDto.Telefonos.Count == 0)
+                clienteDto.Telefonos.Add(new TelefonoDto());
+
             return View(clienteDto);
         }
 
