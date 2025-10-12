@@ -41,7 +41,6 @@
                 <div class="card mb-2 phone-item">
                     <div class="card-body">
                         <input type="hidden" name="Telefonos.Index" value="@i" />
-
                         <input type="hidden" name="Telefonos[@i].Id" value="@Model.Telefonos[i].Id" />
 
                         <div class="row g-2 align-items-end">
@@ -96,7 +95,7 @@
     <div class="card mb-2 phone-item">
         <div class="card-body">
             <input type="hidden" name="Telefonos.Index" value="__index__" />
-            <input type="hidden" name="Telefonos[__index__].Id" /> 
+            <input type="hidden" name="Telefonos[__index__].Id" />
 
             <div class="row g-2 align-items-end">
                 <div class="col-md-6">
@@ -137,37 +136,37 @@
 </template>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
-        (function () {
-            const list = document.getElementById('phones-list');
-            const btnAdd = document.getElementById('btnAddPhone');
-            const tmpl = document.getElementById('phone-template');
+        document.addEventListener("DOMContentLoaded", function () {
+            const btnAddPhone = document.getElementById("btnAddPhone");
+            const phonesList = document.getElementById("phones-list");
+            const phoneTemplate = document.getElementById("phone-template").innerHTML;
 
-            let nextIdx = list.querySelectorAll('input[name="Telefonos.Index"]').length;
-
-            if (nextIdx === 0) addPhone();
-
-            btnAdd.addEventListener('click', addPhone);
-
-            list.addEventListener('click', function (e) {
-                if (e.target.classList.contains('btn-remove-phone')) {
-                    e.target.closest('.phone-item')?.remove();
-                }
+            function updatePhoneIndices() {
+                const phoneItems = phonesList.querySelectorAll(".phone-item");
+                phoneItems.forEach((item, index) => {
+                    const indexInput = item.querySelector("input[name='Telefonos.Index']");
+                    if (indexInput) indexInput.value = index;
+                    item.querySelectorAll("[name]").forEach(input => {
+                        input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
+                    });
+                });
+            }
+            btnAddPhone.addEventListener("click", function () {
+                const newPhoneHtml = phoneTemplate.replace(/__index__/g, "0"); 
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = newPhoneHtml;
+                phonesList.appendChild(tempDiv.firstElementChild);
+                updatePhoneIndices();
             });
 
-            function addPhone() {
-                const html = tmpl.innerHTML.replaceAll('__index__', nextIdx.toString());
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = html.trim();
-                const node = wrapper.firstElementChild;
-                list.appendChild(node);
-                nextIdx++;
-
-                if (window.jQuery && jQuery.validator && jQuery.validator.unobtrusive) {
-                    jQuery.validator.unobtrusive.parse(node);
+            phonesList.addEventListener("click", function (e) {
+                if (e.target.classList.contains("btn-remove-phone")) {
+                    const phoneItem = e.target.closest(".phone-item");
+                    phoneItem.remove();
+                    updatePhoneIndices();
                 }
-            }
-        })();
+            });
+        });
     </script>
 }
